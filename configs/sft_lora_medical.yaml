@@ -42,18 +42,18 @@ lora:
 # ---- training hyperparameters (8GB-safe starting point) ----
 training:
   output_dir: "adapters/medgemma-1.5-4b-preventive-sft-v0"
-  num_train_epochs: 3
+  num_train_epochs: 5               # small v1 set (48 train) -> more passes
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 16   # effective batch = 16
+  gradient_accumulation_steps: 8    # effective batch = 8 (~30 updates over 5 epochs)
   learning_rate: 2.0e-4
   lr_scheduler_type: "cosine"
   warmup_ratio: 0.03
   weight_decay: 0.0
-  max_seq_length: 2048              # longitudinal records are long; watch VRAM
+  max_seq_length: 2048              # compact input keeps all examples <=1882 tokens
   gradient_checkpointing: true
   bf16: true
   optim: "paged_adamw_8bit"
-  logging_steps: 10
+  logging_steps: 5
   save_strategy: "epoch"
   seed: 42
 
