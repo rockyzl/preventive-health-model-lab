@@ -5,9 +5,10 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 # keep small, clearly-synthetic examples under data/synthetic/ and examples/ tracked;
-# but ignore anything large that lands in synthetic/
+# but ignore anything large / bulk that lands in synthetic/
 data/synthetic/*.parquet
 data/synthetic/*.arrow
+data/synthetic/*.jsonl
 models/
 adapters/
 checkpoints/
