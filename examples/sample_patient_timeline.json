@@ -1,0 +1,78 @@
+{
+  "record_id": "SYNTHETIC-001",
+  "synthetic": true,
+  "provenance": "Hand-authored fictional record. NOT a real person. No PHI. Created for schema/example purposes in the Preventive Health Model Lab.",
+  "demographics": {
+    "pseudonym": "Alex Doe (fictional)",
+    "age": 47,
+    "sex_at_birth": "male",
+    "height_cm": 178,
+    "notes": "Office worker, sedentary job. Values invented for illustration."
+  },
+  "family_history": [
+    {"relation": "father", "condition": "type 2 diabetes", "onset_age": 52},
+    {"relation": "father", "condition": "coronary artery disease", "onset_age": 61},
+    {"relation": "mother", "condition": "hypertension", "onset_age": 55},
+    {"relation": "paternal_grandfather", "condition": "myocardial infarction", "onset_age": 64}
+  ],
+  "medications": [
+    {"name": "none (baseline)", "start": "2023-Q1", "stop": "2024-Q3", "note": "no regular medications"},
+    {"name": "atorvastatin 10mg", "start": "2025-02", "stop": null, "note": "started after LDL trend + family CAD; SYNTHETIC"}
+  ],
+  "immunizations": [
+    {"vaccine": "influenza", "date": "2023-10-14"},
+    {"vaccine": "influenza", "date": "2024-10-09"},
+    {"vaccine": "Tdap booster", "date": "2024-03-02"},
+    {"vaccine": "influenza", "date": "2025-10-21"}
+  ],
+  "lifestyle": {
+    "smoking": "never",
+    "alcohol": "2-4 drinks/week",
+    "activity": "sedentary; ~3000 steps/day self-reported; began light walking Q2-2025",
+    "diet": "self-reports frequent takeout, sugary drinks 1-2/day through 2024, cutting back in 2025",
+    "sleep": "6h/night average, reports work stress"
+  },
+  "timeline": [
+    {
+      "date": "2023-03-12",
+      "type": "annual_physical",
+      "vitals": {"bp_systolic": 122, "bp_diastolic": 78, "hr": 72, "weight_kg": 84, "bmi": 26.5},
+      "labs": {"hba1c_pct": 5.5, "fasting_glucose_mgdl": 96, "ldl_mgdl": 128, "hdl_mgdl": 44, "triglycerides_mgdl": 150, "total_chol_mgdl": 202},
+      "note": "Baseline. Slightly overweight. Lipids borderline; fasting glucose normal."
+    },
+    {
+      "date": "2023-09-20",
+      "type": "lab_only",
+      "labs": {"ldl_mgdl": 134, "hdl_mgdl": 43, "triglycerides_mgdl": 168},
+      "note": "Repeat lipid panel; LDL creeping up."
+    },
+    {
+      "date": "2024-03-18",
+      "type": "annual_physical",
+      "vitals": {"bp_systolic": 128, "bp_diastolic": 82, "hr": 74, "weight_kg": 86, "bmi": 27.1},
+      "labs": {"hba1c_pct": 5.9, "fasting_glucose_mgdl": 104, "ldl_mgdl": 141, "hdl_mgdl": 42, "triglycerides_mgdl": 182, "total_chol_mgdl": 214},
+      "note": "HbA1c now in prediabetes range (5.7-6.4). Weight up 2kg. BP trending up. Counseled on diet/activity."
+    },
+    {
+      "date": "2024-09-11",
+      "type": "lab_only",
+      "labs": {"fasting_glucose_mgdl": 108, "ldl_mgdl": 145},
+      "note": "Fasting glucose still elevated. Patient reports minimal lifestyle change so far."
+    },
+    {
+      "date": "2025-02-05",
+      "type": "follow_up_visit",
+      "vitals": {"bp_systolic": 134, "bp_diastolic": 86, "hr": 76, "weight_kg": 87, "bmi": 27.5},
+      "labs": {"hba1c_pct": 6.3, "fasting_glucose_mgdl": 112, "ldl_mgdl": 149, "hdl_mgdl": 41, "triglycerides_mgdl": 190, "total_chol_mgdl": 222},
+      "note": "HbA1c 6.3% (upper prediabetes). BP now elevated/stage-1 range on single reading. Started atorvastatin 10mg given LDL trend + strong family CAD history. Discussed structured lifestyle program."
+    },
+    {
+      "date": "2025-06-24",
+      "type": "follow_up_visit",
+      "vitals": {"bp_systolic": 130, "bp_diastolic": 84, "hr": 73, "weight_kg": 85, "bmi": 26.8},
+      "labs": {"hba1c_pct": 6.1, "ldl_mgdl": 118},
+      "note": "Early response: began walking + cut sugary drinks. HbA1c down slightly to 6.1%; LDL improved on statin. Encouraged to continue; recheck in 6 months."
+    }
+  ],
+  "notes": "SYNTHETIC record for pipeline/example use only. Trends chosen to illustrate a preventive-health reasoning scenario (rising HbA1c into prediabetes, LDL creep, BP creep, strong family cardiometabolic history). No claim of clinical accuracy for any real individual."
+}
