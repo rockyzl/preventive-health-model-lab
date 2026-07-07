@@ -125,6 +125,8 @@ def build_argparser() -> argparse.ArgumentParser:
     )
     p.add_argument("--train-file", default=None, help="override path to train JSONL")
     p.add_argument("--val-file", default=None, help="override path to eval/val JSONL")
+    p.add_argument("--model", default=None, help="override base model_id (non-smoke), e.g. the control model")
+    p.add_argument("--output-dir", default=None, help="override adapter output dir (non-smoke)")
     p.add_argument(
         "--max-steps",
         type=int,
@@ -169,6 +171,9 @@ def setup_tracking(cfg: dict, args: argparse.Namespace) -> list[str]:
 
     os.environ.setdefault("MLFLOW_TRACKING_URI", f"file:{REPO_ROOT / 'mlruns'}")
     os.environ.setdefault("MLFLOW_EXPERIMENT_NAME", tracking.get("experiment_name", "preventive-health-sft"))
+    # mlflow 3.x rejects the local file store unless opted in; keep the simple
+    # ./mlruns workflow (readable by `mlflow ui`) instead of forcing a DB backend.
+    os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
     print(f"[tracking] mlflow -> {os.environ['MLFLOW_TRACKING_URI']}")
     return ["mlflow"]
 
@@ -191,8 +196,9 @@ def train(args: argparse.Namespace) -> int:
         max_length = min(int(train_cfg.get("max_seq_length", 2048)), 512)
         print(f"[smoke] overriding model_id -> {model_id} (ungated), max_steps={max_steps}")
     else:
-        model_id = model_cfg.get("model_id", "")
-        output_dir = (REPO_ROOT / train_cfg.get("output_dir", "adapters/sft")).resolve()
+        model_id = args.model or model_cfg.get("model_id", "")
+        _out = args.output_dir or train_cfg.get("output_dir", "adapters/sft")
+        output_dir = (REPO_ROOT / _out).resolve()
         max_steps = args.max_steps if args.max_steps is not None else -1
         limit = args.limit
         max_length = int(train_cfg.get("max_seq_length", 2048))
@@ -208,7 +214,7 @@ def train(args: argparse.Namespace) -> int:
         import torch
         from datasets import load_dataset
         from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+        from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
         from trl import SFTConfig, SFTTrainer
     except ImportError as exc:  # noqa: BLE001
         print(
@@ -244,27 +250,48 @@ def train(args: argparse.Namespace) -> int:
         # LoRA SFT needs a pad token; fall back to EOS (standard for decoder-only LMs).
         tokenizer.pad_token = tokenizer.eos_token
 
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id,
+    # Gemma 3 / MedGemma ship as multimodal Gemma3ForConditionalGeneration. Load
+    # with that NATIVE class (Gemma3ForCausalLM leaves 445 text keys randomly
+    # initialised — a silent-garbage trap, verified). We feed text only, so the
+    # vision tower is loaded (small in 4-bit, ~+0.3 GiB) but never in the forward
+    # path. Other bases (e.g. the Qwen smoke model) use Auto* unchanged.
+    _cfg = AutoConfig.from_pretrained(
+        model_id, trust_remote_code=bool(model_cfg.get("trust_remote_code", False))
+    )
+    is_gemma3 = getattr(_cfg, "model_type", "") == "gemma3"
+    _load_kwargs = dict(
         quantization_config=bnb_config,
         device_map={"": 0},
         dtype=compute_dtype,
         trust_remote_code=bool(model_cfg.get("trust_remote_code", False)),
         attn_implementation=model_cfg.get("attn_implementation", "eager"),
     )
+    if is_gemma3:
+        from transformers import Gemma3ForConditionalGeneration
+        print("  (gemma3 detected -> Gemma3ForConditionalGeneration, text-only)")
+        model = Gemma3ForConditionalGeneration.from_pretrained(model_id, **_load_kwargs)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(model_id, **_load_kwargs)
     model.config.use_cache = False  # required with gradient checkpointing
 
     # --- prepare for k-bit training + attach LoRA ---
     use_gc = bool(train_cfg.get("gradient_checkpointing", True))
     model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gc)
 
+    _target_names = list(lora_cfg.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj"]))
+    if is_gemma3:
+        # The same proj names also exist in the vision tower; scope LoRA to the
+        # language model only (a str target_modules is treated as a full regex).
+        target_modules = r".*language_model.*(" + "|".join(_target_names) + r")"
+    else:
+        target_modules = _target_names
     lora_config = LoraConfig(
         r=int(lora_cfg.get("r", 16)),
         lora_alpha=int(lora_cfg.get("alpha", 32)),
         lora_dropout=float(lora_cfg.get("dropout", 0.05)),
         bias=lora_cfg.get("bias", "none"),
         task_type=lora_cfg.get("task_type", "CAUSAL_LM"),
-        target_modules=list(lora_cfg.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj"])),
+        target_modules=target_modules,
     )
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()

@@ -38,6 +38,7 @@ from preventive_health_model_lab.data.schema import (  # noqa: E402
     validate_instruction_record,
     validate_output_sections,
 )
+from preventive_health_model_lab.data.rendering import render_timeline  # noqa: E402
 from preventive_health_model_lab.data.synthetic_generator import (  # noqa: E402
     derive_output_sections,
     render_output_markdown,
@@ -79,7 +80,7 @@ def timeline_to_instruction_record(timeline: dict[str, Any]) -> dict[str, Any]:
     output_text = render_output_markdown(sections)
 
     input_view = {k: v for k, v in timeline.items() if k != "synthetic_meta"}
-    input_str = json.dumps(input_view, ensure_ascii=False, indent=2)
+    input_str = render_timeline(input_view)
 
     return {
         "instruction": INSTRUCTION,

@@ -130,18 +130,31 @@ def test_04_help_exits_zero():
 
 def test_04_gated_guard_blocks_real_run_without_weights(tmp_path):
     """Without --smoke and without cached weights, 04 must refuse (exit 2),
-    printing license guidance — never a silent gated download."""
+    printing license guidance — never a silent gated download.
+
+    Uses a bogus, definitely-uncached model_id via a temp config so the guard's
+    'weights absent -> refuse' path fires deterministically, regardless of what
+    the real HF cache happens to hold (e.g. after a real MedGemma download)."""
+    cfg = tmp_path / "bogus.yaml"
+    cfg.write_text(
+        "model:\n"
+        "  model_id: \"phml-nonexistent/definitely-not-cached-xyz\"\n"
+        "  trust_remote_code: false\n"
+        "training:\n"
+        "  output_dir: \"adapters/_test\"\n"
+        "data:\n"
+        "  train_path: \"data/processed/train.jsonl\"\n"
+        "  eval_path: \"data/processed/val.jsonl\"\n"
+    )
     proc = subprocess.run(
-        [sys.executable, str(SCRIPTS / "04_train_sft.py")],
+        [sys.executable, str(SCRIPTS / "04_train_sft.py"), "--config", str(cfg)],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
         timeout=120,
     )
-    # Either the gated-model guard (2) fires, or (if someone cached MedGemma)
-    # it proceeds — but on a machine without the gated weights it must be 2.
-    if proc.returncode == 2:
-        assert "hf" in proc.stderr.lower() or "license" in proc.stderr.lower()
+    assert proc.returncode == 2, f"expected gated-guard exit 2, got {proc.returncode}"
+    assert "hf" in proc.stderr.lower() or "license" in proc.stderr.lower()
 
 
 # --------------------------------------------------------------------------

@@ -115,8 +115,10 @@ def test_synthetic_meta_is_stripped_from_model_input(patients):
         # archetype label must not leak into what the model sees
         assert "synthetic_meta" not in record["input"]
         assert p.archetype not in record["input"]
-        # but the synthetic flag must survive
-        assert '"synthetic": true' in record["input"]
+        # the compact input is still explicitly marked synthetic, and the
+        # record-level flag survives (safety marker, not a JSON substring now)
+        assert "synthetic" in record["input"].lower()
+        assert record["synthetic"] is True
 
 
 def test_instruction_records_validate(patients):
