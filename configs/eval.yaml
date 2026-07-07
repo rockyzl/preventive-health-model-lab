@@ -1,0 +1,41 @@
+# Evaluation / baseline-inference config — Preventive Health Model Lab
+# =================================================================
+# Read by scripts/03_run_baseline.py. In Phase 1 the script only
+# RESOLVES this config (and runs with --dry-run); it performs no
+# network download and no generation unless weights are already local.
+# -----------------------------------------------------------------
+
+model:
+  # Base (un-fine-tuned) model used for the baseline pass.
+  # Gated on HF; must be pre-downloaded or the script exits with guidance.
+  model_id: "google/medgemma-4b-it"
+  # Optional: point at a trained adapter to evaluate it instead of the base.
+  adapter_path: null
+  trust_remote_code: false
+
+generation:
+  max_new_tokens: 768
+  temperature: 0.3        # low — we want conservative, non-speculative output
+  top_p: 0.9
+  repetition_penalty: 1.1
+  do_sample: true
+
+# ---- prompts ----
+# Baseline reads longitudinal-record prompts from here. Each item is a
+# synthetic patient timeline (see examples/). NEVER real PHI.
+prompts:
+  path: "examples/"
+  # Which files to feed. Glob relative to `path`.
+  glob: "sample_patient_timeline*.json"
+
+# ---- output framing (enforced by src/.../safety) ----
+safety:
+  require_disclaimer: true
+  require_uncertainty: true
+  forbid_diagnostic_language: true   # eval flags outputs that "diagnose"
+
+# ---- scoring (later phase) ----
+scoring:
+  # 7-part schema conformance is the primary automatic metric.
+  schema_check: true
+  rubric_path: "configs/eval_rubric.yaml"   # not present yet — later phase

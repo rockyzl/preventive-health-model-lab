@@ -1,0 +1,40 @@
+# Preventive Health Model Lab — dependency manifest
+# =================================================================
+# Loosely pinned on purpose: this repo targets an RTX PRO 2000
+# (Blackwell, 8GB VRAM, CUDA 13.1) under WSL2. The GPU stack is
+# fragile across CUDA/driver combos, so we DO NOT pin exact wheels
+# here — install the heavy pieces deliberately, following the notes.
+#
+# Phase 1 (scaffold) only needs the "light tools" block. The GPU
+# stack is listed for reference and installed later, on demand.
+# -----------------------------------------------------------------
+
+# ---- light tools: enough to run scripts' non-GPU paths + tests ----
+pyyaml>=6.0
+pandas>=2.0
+pytest>=8.0
+
+# ---- training / model stack (install later, NOT in Phase 1) ----
+#
+# torch:
+#   Do NOT pin a wheel here. Blackwell (sm_120) needs a recent CUDA
+#   build. Install from https://pytorch.org per your CUDA version,
+#   e.g. a cu124+ nightly/stable that has Blackwell kernels. Verify
+#   with scripts/00_check_environment.py after install.
+# torch  (install per pytorch.org — see note above)
+#
+transformers>=4.50        # MedGemma-class support landed in recent 4.5x
+datasets>=2.19
+peft>=0.11                # LoRA / QLoRA adapters
+trl>=0.9                  # SFTTrainer
+accelerate>=0.30
+bitsandbytes>=0.43        # 4-bit QLoRA — VERIFY Blackwell/sm_120 support
+                          # before relying on it; may need a source build.
+sentencepiece>=0.2        # tokenizer backend for Gemma-family models
+
+# ---- experiment tracking + UI ----
+mlflow>=2.12
+streamlit>=1.35
+
+# ---- misc ----
+# (pandas / pyyaml / pytest already pinned in the light block above)

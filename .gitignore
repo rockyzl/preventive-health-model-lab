@@ -1,0 +1,45 @@
+# ---- data & model artifacts (never commit) ----
+data/raw/
+data/processed/
+# keep small, clearly-synthetic examples under data/synthetic/ and examples/ tracked;
+# but ignore anything large that lands in synthetic/
+data/synthetic/*.parquet
+data/synthetic/*.arrow
+models/
+adapters/
+checkpoints/
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+
+# ---- experiment tracking ----
+wandb/
+mlruns/
+mlflow.db
+*.log
+
+# ---- python ----
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ---- os / editor ----
+.DS_Store
+.idea/
+.vscode/
+
+# ---- secrets ----
+.env
+*.secret

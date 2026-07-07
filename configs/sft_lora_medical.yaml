@@ -1,0 +1,71 @@
+# QLoRA / SFT config — Preventive Health Model Lab
+# =================================================================
+# Phase 1: this file is the DESIGN CONTRACT for the training run.
+# No trainer reads it yet (scripts/04_train_*.py is a later phase).
+# Values are tuned for a single 8GB Blackwell GPU (RTX PRO 2000).
+# Treat every number as a starting point, not a validated setting.
+# -----------------------------------------------------------------
+
+model:
+  # MedGemma-class 4B, instruction-tuned variant.
+  # Gated on Hugging Face — requires accepting the license + `hf login`.
+  # Not downloaded in Phase 1.
+  model_id: "google/medgemma-4b-it"
+  trust_remote_code: false
+  attn_implementation: "eager"   # switch to "flash_attention_2" only if the wheel supports Blackwell
+
+# ---- 4-bit quantization (QLoRA) ----
+# NOTE: bitsandbytes Blackwell/sm_120 support must be verified before
+# relying on these; a source build may be required. See requirements.txt.
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_compute_dtype: "bfloat16"
+
+# ---- LoRA adapter ----
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+# ---- training hyperparameters (8GB-safe starting point) ----
+training:
+  output_dir: "adapters/medgemma4b-preventive-sft-v0"
+  num_train_epochs: 3
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 16   # effective batch = 16
+  learning_rate: 2.0e-4
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  max_seq_length: 2048              # longitudinal records are long; watch VRAM
+  gradient_checkpointing: true
+  bf16: true
+  optim: "paged_adamw_8bit"
+  logging_steps: 10
+  save_strategy: "epoch"
+  seed: 42
+
+# ---- dataset ----
+data:
+  train_path: "data/processed/train.jsonl"
+  eval_path: "data/processed/val.jsonl"
+  # patient-level split is MANDATORY — no patient in both train and eval.
+  split_by: "patient_id"
+
+# ---- experiment tracking ----
+tracking:
+  backend: "mlflow"          # local ./mlruns
+  experiment_name: "preventive-health-sft"
+  run_name: "medgemma4b-qlora-v0"
