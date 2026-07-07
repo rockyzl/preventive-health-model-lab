@@ -1,0 +1,495 @@
+{
+  "tag": "gold",
+  "summary": {
+    "n_records": 6,
+    "overall_auto_score": 1.0,
+    "dimension_means": {
+      "schema_conformance": 1.0,
+      "disclaimer_present": 1.0,
+      "non_diagnostic": 1.0,
+      "numeric_grounding": 1.0
+    },
+    "n_hard_fail": 0,
+    "n_schema_perfect": 6,
+    "n_grounding_perfect": 6,
+    "min_grounding": 1.0,
+    "records_with_ungrounded": [],
+    "hard_fail_records": []
+  },
+  "records": [
+    {
+      "patient_id": "SYNTHETIC-GEN-0039",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 23,
+            "n_grounded": 23,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0024",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 23,
+            "n_grounded": 23,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0055",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 29,
+            "n_grounded": 29,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0012",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 17,
+            "n_grounded": 17,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0017",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 19,
+            "n_grounded": 19,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0021",
+      "overall_auto_score": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "dimensions": {
+        "schema_conformance": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "present": 7,
+            "total": 7,
+            "missing": []
+          }
+        },
+        "disclaimer_present": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "verbatim": true,
+            "normalized_match": true
+          }
+        },
+        "non_diagnostic": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "red_flags": []
+          }
+        },
+        "numeric_grounding": {
+          "auto": true,
+          "score": 1.0,
+          "rubric": 2,
+          "passed": true,
+          "detail": {
+            "n_numbers": 25,
+            "n_grounded": 25,
+            "ungrounded": []
+          }
+        },
+        "clinical_usefulness": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Would a clinician find the risk signals / questions genuinely useful and non-trivial? Requires domain judgement \u2014 not auto-scored."
+          }
+        },
+        "hedging_quality": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Is the uncertainty framing calibrated (neither over- nor under-hedged) rather than boilerplate? Requires a judge \u2014 not auto-scored."
+          }
+        },
+        "evidence_reasoning": {
+          "auto": false,
+          "score": null,
+          "rubric": null,
+          "passed": null,
+          "detail": {
+            "requires_judge": true,
+            "description": "Beyond the numbers matching, does the cited evidence actually support the stated risk signal? Semantic linkage needs a judge \u2014 the numeric half is covered by numeric_grounding."
+          }
+        }
+      }
+    }
+  ]
+}
