@@ -127,6 +127,8 @@ def build_argparser() -> argparse.ArgumentParser:
     p.add_argument("--val-file", default=None, help="override path to eval/val JSONL")
     p.add_argument("--model", default=None, help="override base model_id (non-smoke), e.g. the control model")
     p.add_argument("--output-dir", default=None, help="override adapter output dir (non-smoke)")
+    p.add_argument("--no-track", action="store_true", help="disable mlflow tracking (report_to=[])")
+    p.add_argument("--no-eval", action="store_true", help="skip in-training eval (do final scoring via scripts/05)")
     p.add_argument(
         "--max-steps",
         type=int,
@@ -155,7 +157,7 @@ def setup_tracking(cfg: dict, args: argparse.Namespace) -> list[str]:
 
     Returns the ``report_to`` list for SFTConfig. Smoke runs never track.
     """
-    if args.smoke:
+    if args.smoke or args.no_track:
         return []
     tracking = cfg.get("tracking", {})
     if tracking.get("backend") != "mlflow":
@@ -312,7 +314,7 @@ def train(args: argparse.Namespace) -> int:
     formatting_func = make_formatting_func(eos_token=tokenizer.eos_token or "")
 
     # --- trainer config ---
-    do_eval = eval_ds is not None and not args.smoke
+    do_eval = eval_ds is not None and not args.smoke and not args.no_eval
     sft_config = SFTConfig(
         output_dir=str(output_dir),
         max_length=max_length,
