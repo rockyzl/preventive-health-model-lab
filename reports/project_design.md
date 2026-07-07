@@ -103,14 +103,14 @@ general base, same data, same recipe).
 | Training time (ballpark, 5–10K examples × 1–2 epochs) | hours-class on this laptop GPU, not days — acceptable for iteration |
 | torch | **≥2.7.0 with cu128 wheel** (`--index-url https://download.pytorch.org/whl/cu128`) — first stable release with Blackwell/sm_120 support ([PyTorch 2.7 release](https://pytorch.org/blog/pytorch-2-7/)) |
 | transformers / peft / trl / accelerate | current versions (Gemma 3 support landed in transformers ≥4.50) |
-| bitsandbytes | **≥0.48, cu128 build** — Blackwell 4-bit verified on Linux/WSL2 ([NVIDIA×Unsloth blog](https://developer.nvidia.com/blog/train-an-llm-on-an-nvidia-blackwell-desktop-with-unsloth-and-scale-it/)); mandatory 4-bit load **smoke test before any training**; fallback = Unsloth prebuilt stack |
+| bitsandbytes | **≥0.48, cu128 build** — smoke test **PASSED 2026-07-07** on this GPU: torch 2.11.0+cu128 + bnb 0.49.2, 4-bit load+generate OK at 0.44 GiB (`reports/environment_verified.md`). Unsloth fallback no longer needed. |
 
 ## 6. Risks & fallbacks
 
 | Risk | Level | Fallback |
 |---|---|---|
 | MedGemma HAI-DEF license: adapter redistribution not explicit; model card forbids direct clinical use | **Project-level** | Keep repo framing strictly research/education (already structural); if redistribution blocked, publish evals + code only, or switch primary to Apache-2.0 Qwen-class |
-| bitsandbytes kernel on sm_120 | Medium | 4-bit load smoke test first; Unsloth stack as drop-in fallback |
+| ~~bitsandbytes kernel on sm_120~~ **CLEARED** | ~~Medium~~ | Smoke test passed 2026-07-07 (torch 2.11 cu128 + bnb 0.49.2, 4-bit OK). No longer a risk. |
 | Synthetic-only training data (Synthea realism ceiling) | Medium | Honest framing as pipeline-validation v1; Track 2 real data lands in v2; document the gap in the model card |
 | PhysioNet credentialing delay / solo-researcher reference hurdle | Low (v1 unblocked) | v1 never depends on it; EHRSHOT DUA as second real-data path |
 | 8 GB OOM during training | Low | seq→1k, LoRA r 16→8, accum ↑; last resort: rent a cloud GPU for the final run, keep local for dev |

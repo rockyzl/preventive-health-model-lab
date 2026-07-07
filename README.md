@@ -62,8 +62,10 @@ Developed for a modest local box:
 - Everything is sized for a single small GPU: 4B base, `r=16` LoRA, batch 1 +
   grad accumulation, gradient checkpointing. See `configs/sft_lora_medical.yaml`.
 
-`bitsandbytes` Blackwell/`sm_120` support must be **verified** before relying
-on it — see `requirements.txt`.
+`bitsandbytes` Blackwell/`sm_120` support is **verified working** (2026-07-07):
+torch 2.11.0+cu128 + bnb 0.49.2, 4-bit load+generate OK at 0.44 GiB. Reproduce
+with `python scripts/00b_smoke_test_4bit.py`; details in
+`reports/environment_verified.md`.
 
 ---
 
