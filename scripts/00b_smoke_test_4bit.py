@@ -83,7 +83,7 @@ def main() -> None:
         tok = AutoTokenizer.from_pretrained(args.model)
         model = AutoModelForCausalLM.from_pretrained(
             args.model, quantization_config=quant, device_map="cuda",
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
         )
     except Exception as exc:  # noqa: BLE001
         text = f"{type(exc).__name__}: {exc}"
@@ -103,12 +103,16 @@ def main() -> None:
         prompt = "In one sentence, what is preventive medicine?"
         msgs = [{"role": "user", "content": prompt}]
         try:
-            inputs = tok.apply_chat_template(
-                msgs, add_generation_prompt=True, return_tensors="pt"
-            ).to("cuda")
-            out = model.generate(inputs, max_new_tokens=args.max_new_tokens,
+            # transformers 5.x: apply_chat_template(return_tensors=...) yields a
+            # BatchEncoding, so render to text then tokenize for a stable path.
+            text = tok.apply_chat_template(
+                msgs, add_generation_prompt=True, tokenize=False
+            )
+            enc = tok(text, return_tensors="pt").to("cuda")
+            out = model.generate(**enc, max_new_tokens=args.max_new_tokens,
                                  do_sample=False)
-            gen = tok.decode(out[0][inputs.shape[1]:], skip_special_tokens=True)
+            gen = tok.decode(out[0][enc["input_ids"].shape[1]:],
+                             skip_special_tokens=True)
             print(f"generate OK           : {gen.strip()[:120]!r}")
         except Exception as exc:  # noqa: BLE001
             _fail(f"4-bit load succeeded but generate failed:\n{type(exc).__name__}: {exc}")
