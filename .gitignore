@@ -1,6 +1,9 @@
 # ---- data & model artifacts (never commit) ----
-data/raw/
-data/processed/
+# Ignore the CONTENTS of raw/processed, but keep the empty dirs (.gitkeep).
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
 # keep small, clearly-synthetic examples under data/synthetic/ and examples/ tracked;
 # but ignore anything large that lands in synthetic/
 data/synthetic/*.parquet
