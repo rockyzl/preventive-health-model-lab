@@ -8,7 +8,7 @@
 model:
   # Base (un-fine-tuned) model used for the baseline pass.
   # Gated on HF; must be pre-downloaded or the script exits with guidance.
-  model_id: "google/medgemma-4b-it"
+  model_id: "google/medgemma-1.5-4b-it"
   # Optional: point at a trained adapter to evaluate it instead of the base.
   adapter_path: null
   trust_remote_code: false

@@ -17,10 +17,10 @@ pytest>=8.0
 # ---- training / model stack (install later, NOT in Phase 1) ----
 #
 # torch:
-#   Do NOT pin a wheel here. Blackwell (sm_120) needs a recent CUDA
-#   build. Install from https://pytorch.org per your CUDA version,
-#   e.g. a cu124+ nightly/stable that has Blackwell kernels. Verify
-#   with scripts/00_check_environment.py after install.
+#   Do NOT pin a wheel here. Blackwell (sm_120) needs torch >= 2.7.0
+#   with the cu128 build (first stable release with Blackwell kernels):
+#     pip install torch --index-url https://download.pytorch.org/whl/cu128
+#   Verify with scripts/00_check_environment.py after install.
 # torch  (install per pytorch.org — see note above)
 #
 transformers>=4.50        # MedGemma-class support landed in recent 4.5x
@@ -28,8 +28,9 @@ datasets>=2.19
 peft>=0.11                # LoRA / QLoRA adapters
 trl>=0.9                  # SFTTrainer
 accelerate>=0.30
-bitsandbytes>=0.43        # 4-bit QLoRA — VERIFY Blackwell/sm_120 support
-                          # before relying on it; may need a source build.
+bitsandbytes>=0.48        # 4-bit QLoRA on Blackwell/sm_120 needs a cu128
+                          # build; run a 4-bit load smoke test before training
+                          # (Unsloth prebuilt stack is a fallback).
 sentencepiece>=0.2        # tokenizer backend for Gemma-family models
 
 # ---- experiment tracking + UI ----

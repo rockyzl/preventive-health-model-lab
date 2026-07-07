@@ -70,7 +70,8 @@ on it — see `requirements.txt`.
 ## What works TODAY
 
 ```bash
-# 0. (optional) create a light venv for the non-GPU tooling
+# 0. create a light venv for the non-GPU tooling (required: steps 3 and 5
+#    need pyyaml/pytest; steps 1/2/4 are pure stdlib)
 python3 -m venv .venv && source .venv/bin/activate
 pip install pyyaml pandas pytest        # light tools only; NOT the GPU stack
 

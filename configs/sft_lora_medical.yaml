@@ -10,7 +10,7 @@ model:
   # MedGemma-class 4B, instruction-tuned variant.
   # Gated on Hugging Face — requires accepting the license + `hf login`.
   # Not downloaded in Phase 1.
-  model_id: "google/medgemma-4b-it"
+  model_id: "google/medgemma-1.5-4b-it"
   trust_remote_code: false
   attn_implementation: "eager"   # switch to "flash_attention_2" only if the wheel supports Blackwell
 
@@ -41,7 +41,7 @@ lora:
 
 # ---- training hyperparameters (8GB-safe starting point) ----
 training:
-  output_dir: "adapters/medgemma4b-preventive-sft-v0"
+  output_dir: "adapters/medgemma-1.5-4b-preventive-sft-v0"
   num_train_epochs: 3
   per_device_train_batch_size: 1
   gradient_accumulation_steps: 16   # effective batch = 16
@@ -68,4 +68,4 @@ data:
 tracking:
   backend: "mlflow"          # local ./mlruns
   experiment_name: "preventive-health-sft"
-  run_name: "medgemma4b-qlora-v0"
+  run_name: "medgemma-1.5-4b-qlora-v0"
