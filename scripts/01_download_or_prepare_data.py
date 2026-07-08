@@ -61,11 +61,12 @@ def list_sources() -> None:
         print(f"      note:    {s['note']}")
 
 
-def generate_synthetic(n: int, seed: int, out: Path) -> int:
+def generate_synthetic(n: int, seed: int, out: Path, start: int = 0) -> int:
     """Generate ``n`` synthetic timelines, hard-validate each, write JSONL.
 
     Any validation error on any record aborts the whole run (non-zero exit)
     so malformed or non-synthetic data can never reach the dataset build.
+    ``start`` offsets the patient index range (for disjoint held-out sets).
     """
     from preventive_health_model_lab.data.synthetic_generator import generate_dataset
     from preventive_health_model_lab.data.schema import validate_patient_timeline
@@ -74,7 +75,7 @@ def generate_synthetic(n: int, seed: int, out: Path) -> int:
         print("--n must be >= 1", file=sys.stderr)
         return 2
 
-    patients = generate_dataset(n, seed)
+    patients = generate_dataset(n, seed, start=start)
 
     # Validate everything BEFORE writing a single line.
     archetypes: dict[str, int] = {}
@@ -124,13 +125,15 @@ def main() -> int:
     parser.add_argument("--n", type=int, default=60, help="number of synthetic patients (with --generate)")
     parser.add_argument("--seed", type=int, default=42, help="RNG seed for reproducibility (with --generate)")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="output JSONL path (with --generate)")
+    parser.add_argument("--start-index", type=int, default=0,
+                        help="patient index offset (with --generate); use to make a disjoint held-out set")
     args = parser.parse_args()
 
     if args.list_sources:
         list_sources()
         return 0
     if args.generate:
-        return generate_synthetic(n=args.n, seed=args.seed, out=args.out)
+        return generate_synthetic(n=args.n, seed=args.seed, out=args.out, start=args.start_index)
     return prepare(dry_run=args.dry_run)
 
 

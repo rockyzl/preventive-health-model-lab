@@ -244,6 +244,40 @@ def build(timelines_path: Path, seed: int) -> int:
     return 0
 
 
+def build_test_only(timelines_path: Path, out_path: Path) -> int:
+    """Build instruction records for ALL input timelines into ONE file (no split).
+
+    For a disjoint held-out evaluation set (generated via scripts/01
+    ``--start-index`` so it shares no patients with the training corpus): every
+    record is pure test, so there is nothing to split. Same per-record
+    validation + safety gates as ``build``.
+    """
+    from preventive_health_model_lab.data.schema import validate_patient_timeline
+
+    timelines = _read_timelines(timelines_path)
+    if not timelines:
+        print(f"No timelines found in {timelines_path}", file=sys.stderr)
+        return 1
+
+    records: list[dict[str, Any]] = []
+    for tl in timelines:
+        if validate_patient_timeline(tl):
+            print(f"FAIL  timeline {tl.get('record_id')}: failed validation", file=sys.stderr)
+            return 1
+        rec = timeline_to_instruction_record(tl)
+        if (validate_instruction_record(rec) or validate_output_sections(rec["output"])
+                or contains_diagnostic_language(rec["output"])):
+            print(f"FAIL  record {rec.get('patient_id')}: failed validation/safety", file=sys.stderr)
+            return 1
+        records.append(rec)
+
+    records = dedup_records(records)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    write_jsonl(records, out_path)
+    print(f"Built {len(records)} held-out test records (no split) -> {out_path}")
+    return 0
+
+
 # --------------------------------------------------------------------------
 # Runnable now: validate the shipped examples.
 # --------------------------------------------------------------------------
@@ -290,12 +324,25 @@ def main() -> int:
         help="input timelines JSONL (with --build)",
     )
     parser.add_argument("--seed", type=int, default=42, help="split RNG seed (with --build)")
+    parser.add_argument(
+        "--build-holdout",
+        action="store_true",
+        help="build ONE instruction file from --timelines (no split; disjoint held-out test set)",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=PROCESSED_DIR / "holdout_test.jsonl",
+        help="output path (with --build-holdout)",
+    )
     args = parser.parse_args()
 
     if args.validate_examples:
         return validate_examples()
     if args.build:
         return build(timelines_path=args.timelines, seed=args.seed)
+    if args.build_holdout:
+        return build_test_only(timelines_path=args.timelines, out_path=args.out)
 
     print(
         "Nothing to do. Choose a mode:\n"

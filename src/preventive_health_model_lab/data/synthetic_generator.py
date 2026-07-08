@@ -836,8 +836,15 @@ def generate_patient(index: int, seed: int) -> GeneratedPatient:
     )
 
 
-def generate_dataset(n: int, seed: int) -> list[GeneratedPatient]:
-    """Generate ``n`` patients (balanced across archetypes by index)."""
+def generate_dataset(n: int, seed: int, start: int = 0) -> list[GeneratedPatient]:
+    """Generate ``n`` patients (balanced across archetypes by index).
+
+    ``start`` offsets the index range to ``[start, start+n)``. Because each
+    patient is deterministic in (seed, index), a held-out set generated with the
+    same seed but a higher ``start`` (e.g. start=60 after a 60-patient training
+    corpus) is disjoint-by-construction from the original patients — no overlap,
+    fully reproducible.
+    """
     if n < 1:
         raise ValueError("n must be >= 1")
-    return [generate_patient(i, seed) for i in range(n)]
+    return [generate_patient(i, seed) for i in range(start, start + n)]
