@@ -54,6 +54,9 @@ def main() -> int:
     ap.add_argument("--out", required=True, help="output predictions JSONL")
     ap.add_argument("--max-new-tokens", type=int, default=1100)
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--condition", default=None, help="label for this run, e.g. medgemma_qlora")
+    ap.add_argument("--timelines", default=str(REPO_ROOT / "data" / "synthetic" / "timelines.jsonl"),
+                    help="source timelines (for the patient_id -> archetype join)")
     args = ap.parse_args()
 
     cfg = load_yaml(args.config)
@@ -81,6 +84,28 @@ def main() -> int:
     if not records:
         print(f"No records in {args.test_file}", file=sys.stderr)
         return 2
+
+    # patient_id -> trajectory archetype (archetype is stripped from the model
+    # input to avoid leakage; recover it from the source timelines for reporting)
+    archetype_of: dict[str, str] = {}
+    tp = Path(args.timelines)
+    if tp.exists():
+        for line in tp.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            tl = json.loads(line)
+            arch = (tl.get("synthetic_meta") or {}).get("archetype")
+            if tl.get("record_id") and arch:
+                archetype_of[tl["record_id"]] = arch
+
+    condition = args.condition or (
+        (Path(args.adapter).name if args.adapter else model_id.split("/")[-1])
+        + ("_qlora" if args.adapter else "_base")
+    )
+    gen_config = {"max_new_tokens": args.max_new_tokens, "do_sample": False, "precision": "4bit-nf4"}
+    from datetime import datetime, timezone
+    generated_at = datetime.now(timezone.utc).isoformat()
 
     import torch
     from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
@@ -122,10 +147,18 @@ def main() -> int:
                     do_sample=False, pad_token_id=tok.pad_token_id,
                 )
             text = tok.decode(gen[0][enc["input_ids"].shape[1]:], skip_special_tokens=True)
+            pid = rec.get("patient_id", "")
             out_fh.write(json.dumps({
+                "patient_id": pid,
+                "condition": condition,
+                "archetype": archetype_of.get(pid, "unknown"),
+                "model_id": model_id,
+                "adapter": args.adapter or None,
                 "input": rec.get("input", ""),
+                "gold": rec.get("output", ""),
                 "prediction": text.strip(),
-                "patient_id": rec.get("patient_id", ""),
+                "gen_config": gen_config,
+                "generated_at": generated_at,
             }, ensure_ascii=False) + "\n")
             n += 1
             print(f"  [{n}/{len(records)}] {rec.get('patient_id','?')}  ({len(text)} chars)")
