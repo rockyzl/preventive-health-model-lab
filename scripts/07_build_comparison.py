@@ -36,8 +36,8 @@ DEMO_DIR = REPO_ROOT / "demo_artifacts"
 CONDITIONS = ["gemma3_base", "gemma3_qlora", "medgemma_base", "medgemma_qlora"]
 
 
-def _load(cond: str) -> list[dict]:
-    p = PRED_DIR / f"{cond}_test_predictions.jsonl"
+def _load(cond: str, suffix: str = "_test_predictions") -> list[dict]:
+    p = PRED_DIR / f"{cond}{suffix}.jsonl"
     if not p.exists():
         raise SystemExit(f"missing predictions: {p}")
     return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
@@ -71,10 +71,16 @@ def _agg(scores: list[dict], dim_names: list[str]) -> dict:
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--suffix", default="_test_predictions",
+                    help="prediction filename suffix after the condition (e.g. _holdout24)")
+    args = ap.parse_args()
+
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     DEMO_DIR.mkdir(parents=True, exist_ok=True)
 
-    preds = {c: _load(c) for c in CONDITIONS}
+    preds = {c: _load(c, args.suffix) for c in CONDITIONS}
     scored = {c: [_score_one(r) for r in preds[c]] for c in CONDITIONS}
     dim_names = sorted(next(iter(scored.values()))[0]["dims"].keys())
 
