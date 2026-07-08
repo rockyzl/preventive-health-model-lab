@@ -40,9 +40,11 @@ for real patient data / PHI.
 | hard-fail rate | 100 % | 0 % |
 | hallucinated numbers (total) | 2 | 0 |
 
-**Honest headline:** on this synthetic benchmark, this non-medical control
-**matched or marginally beat** the medical MedGemma adapter (0 hallucinated numbers
-here vs 2 there). Interpret with care — n=6, automatic metrics, synthetic data. See
+**Finding:** after identical fine-tuning, this non-medical control was
+**indistinguishable from** the medical MedGemma adapter (both near-ceiling; the small
+gap is within n=6 noise). The useful read is that a capable base plus task fine-tuning
+carried the result — medical pretraining was not the deciding factor for this task.
+Interpret with care — n=6, automatic metrics, synthetic data. See
 `reports/final_experiment_report.md`.
 
 ## Limitations

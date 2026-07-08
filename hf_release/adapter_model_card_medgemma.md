@@ -42,10 +42,11 @@ and **not** for real patient data / PHI.
 | hallucinated numbers (total) | 7 | 2 |
 
 Fine-tuning greatly improved safety-framing compliance and reduced hallucinated
-numbers. **Honest note:** in the head-to-head, the non-medical control
-(Gemma 3 4B) matched or marginally beat this adapter (control had 0 hallucinated
-numbers vs 2 here); on this synthetic benchmark **no measurable medical-pretraining
-advantage was observed**. See `reports/final_experiment_report.md`.
+numbers. **Finding:** after identical fine-tuning, this medical adapter and the
+non-medical control (Gemma 3 4B) were indistinguishable (both near-ceiling; gap within
+n=6 noise). The read: for this task, fine-tuning's payoff rides on the base's general
+capability more than on medical pretraining — a statement about fine-tuning, not a
+knock on the medical base. See `reports/final_experiment_report.md`.
 
 ## Limitations
 

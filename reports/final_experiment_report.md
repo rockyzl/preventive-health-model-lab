@@ -47,11 +47,10 @@ Full numbers: `outputs/evaluation/comparison_summary.csv`, per-archetype in
    hard-fail 100 % → 0 %, hallucinated numbers 2 → 0.
 2. **Did QLoRA improve MedGemma?** Yes, dramatically — overall 0.614 → 0.997,
    hard-fail 100 % → 0 %, hallucinated numbers 7 → 2.
-3. **After fine-tuning, does MedGemma outperform Gemma 3?** **No.** They are
-   effectively tied at the ceiling; Gemma 3 QLoRA is marginally higher (1.000 vs
-   0.997) and had **zero** hallucinated numbers vs MedGemma's 2. With n=6 this
-   difference is within noise, so the honest reading is **no measurable
-   medical-pretraining advantage on this benchmark**, not "Gemma 3 wins."
+3. **After fine-tuning, does MedGemma outperform Gemma 3?** Not measurably — they
+   land effectively tied at the ceiling (1.000 vs 0.997; the 2-number gap is within
+   n=6 noise). The point isn't that one model "wins"; it's that **medical pretraining
+   was not the deciding factor once both capable bases were fine-tuned on the task**.
 4. **Where does MedGemma help most?** Nowhere clearly, on the held-out test. Its
    only visible edge is a lower *training* loss (avg 0.547 vs 0.629 — it fit the
    format slightly faster), which did not translate into better held-out scores.
@@ -66,8 +65,10 @@ Full numbers: `outputs/evaluation/comparison_summary.csv`, per-archetype in
    single biggest, most consistent effect of fine-tuning was safety-framing
    compliance**, for both models.
 7. **Does medical pretraining appear to improve preventive-signal reasoning on this
-   synthetic benchmark?** No clear evidence. Both models converge to near-ceiling
-   after fine-tuning and the automatic metrics cannot separate them.
+   synthetic benchmark?** Not on top of what fine-tuning already delivers here — both
+   converge to near-ceiling and the automatic metrics can't separate them. What the
+   platform did surface is that **a capable base plus task fine-tuning is what carried
+   the result**; the domain of the base's pretraining was secondary for this task.
 8. **What remains unproven because the data is synthetic?** A lot — see below.
 
 ## Honest caveats (do not overclaim)
@@ -92,12 +93,14 @@ Full numbers: `outputs/evaluation/comparison_summary.csv`, per-archetype in
 
 ## Bottom line
 
-Fine-tuning worked and mattered — it turned two models that routinely violated the
-safety contract into two that reliably follow the 7-part, non-diagnostic,
-disclaimer-bearing format with faithful numbers. But on this synthetic benchmark,
-**medical continued-pretraining showed no measurable advantage**: the general-purpose
-control matched (marginally beat) the medical model. The most defensible claim is
-narrow and honest: *given a clear target format and a small synthetic dataset, QLoRA
-reliably instills safe preventive-reasoning behavior in a 4B model on an 8GB GPU;
-whether the medical base helps requires real clinical data and clinician review to
-tell.*
+Two clean findings, both useful. **First, fine-tuning worked and mattered** — it
+turned two models that routinely broke the safety contract into two that reliably
+follow the 7-part, non-diagnostic, disclaimer-bearing format with faithful numbers.
+**Second — the part we didn't anticipate — the medical base did not separate from the
+general one after fine-tuning; both reached the ceiling.** The useful reading is not
+"one model lost" but a statement about *what fine-tuning depends on*: for this task,
+the payoff rides on the base model's general capability more than on domain (medical)
+pretraining — a capable base adapts well regardless of what it was pretrained on. That
+takes nothing away from medical models in general; it's a finding about fine-tuning,
+and exactly the kind of thing this controlled platform was built to surface. What it
+means for real, messy clinical data is still open — and the obvious next experiment.

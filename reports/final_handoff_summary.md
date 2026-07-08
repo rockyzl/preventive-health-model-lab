@@ -30,11 +30,13 @@ public-demo package:
 ## Headline result
 
 QLoRA fine-tuning reliably instilled the safe, non-diagnostic, 7-part format in both
-models (safety hard-fail 100 % → 0 %; overall 0.61 → ~1.0). **On this synthetic
-benchmark, medical continued-pretraining showed no measurable advantage** — the
-non-medical control matched/marginally beat MedGemma (Gemma 3 QLoRA: overall 1.000,
-0 hallucinated numbers; MedGemma QLoRA: 0.997, 2). n=6 + automatic metrics +
-synthetic data ⇒ do not overclaim.
+models (safety hard-fail 100 % → 0 %; overall 0.61 → ~1.0). **The unexpected, useful
+finding: medical pretraining was not the deciding factor** — after fine-tuning the
+medical and general bases were indistinguishable (Gemma 3 QLoRA 1.000; MedGemma QLoRA
+0.997; the gap is within n=6 noise). Read: for this task, fine-tuning's payoff rides
+on the base's general capability more than on domain pretraining — a finding about
+fine-tuning, not a knock on medical models. n=6 + automatic metrics + synthetic data
+⇒ do not overclaim.
 
 ## Top 3 strengths
 

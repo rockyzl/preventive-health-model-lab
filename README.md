@@ -30,16 +30,19 @@ On a held-out **synthetic** test set (n=6), scored by **automatic** metrics:
 
 - **QLoRA worked, dramatically, for both** — the biggest, most consistent effect was
   turning models that routinely broke the safety contract (no disclaimer, diagnostic
-  language) into ones that reliably follow the 7-part, non-diagnostic, faithful
-  format.
-- **Medical pretraining showed *no measurable advantage*** here: the non-medical
-  control matched (marginally beat) MedGemma. With n=6, automatic metrics, and
-  synthetic data, the honest conclusion is "no evidence of an advantage on this
-  benchmark," **not** "the medical model is better." Full analysis + caveats:
-  [`reports/final_experiment_report.md`](reports/final_experiment_report.md).
+  language, invented numbers) into ones that reliably follow the 7-part,
+  non-diagnostic, faithful format.
+- **The interesting part: medical pretraining wasn't the deciding factor.** We
+  expected the medical base (MedGemma) to pull ahead after fine-tuning; it didn't —
+  both landed near the ceiling. The useful read is about *what fine-tuning depends
+  on*: for this task the payoff rides on the base model's **general capability** more
+  than on medical pretraining. A capable base adapts well regardless of domain — which
+  says something real about fine-tuning and takes nothing away from medical models.
+  Full analysis + caveats: [`reports/final_experiment_report.md`](reports/final_experiment_report.md).
 
-The value of this project is that it reads like a **real experiment with an honest,
-slightly inconvenient result** — not an over-packaged demo.
+The value is that it's a **real, controlled experiment**: its honest result is more
+informative than a "my model wins" story because it isolates *why* the fine-tuned
+models are good.
 
 ## Why synthetic data
 

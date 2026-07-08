@@ -17,7 +17,8 @@ from the held-out synthetic test set and the automatic evaluation.
 Regenerate everything with `python scripts/07_build_comparison.py` after
 `scripts/06_generate_predictions.py` has produced `outputs/predictions/`.
 
-**Headline (honest):** QLoRA made both 4B models reliably safe and well-formed
-(100 %→0 % safety hard-fails); on this synthetic benchmark the medical model showed
-**no measurable advantage** over the non-medical control. Automatic metrics,
+**Headline:** QLoRA made both 4B models reliably safe and well-formed (100 %→0 %
+safety hard-fails). The unexpected, useful finding: after fine-tuning the medical and
+general bases were **indistinguishable** — for this task, the payoff rode on the
+base's general capability more than on medical pretraining. Automatic metrics,
 synthetic data, n=6 — not clinical evidence. See `reports/final_experiment_report.md`.

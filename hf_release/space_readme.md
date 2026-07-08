@@ -35,12 +35,14 @@ synthetic patients:
 - automatic evaluation scores, with hallucinated numbers highlighted,
 - a "results & limitations" view with the honest head-to-head and its caveats.
 
-## The honest result (headline)
+## The result (headline)
 
 QLoRA fine-tuning reliably instilled the safe, non-diagnostic, 7-part format in both
-4B models (both went from 100 % → 0 % safety hard-fails). On this synthetic benchmark
-the medical model (MedGemma) showed **no measurable advantage** over the non-medical
-control (Gemma 3). Synthetic data + automatic metrics + n=6 ⇒ do not overclaim.
+4B models (both went from 100 % → 0 % safety hard-fails). The unexpected, useful
+finding: after fine-tuning the medical model (MedGemma) and the general control
+(Gemma 3) were **indistinguishable** — so for this task, fine-tuning's payoff rode on
+the base's general capability more than on medical pretraining. Synthetic data +
+automatic metrics + n=6 ⇒ do not overclaim.
 
 ## What it must never do
 
