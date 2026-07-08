@@ -9,6 +9,10 @@ end-to-end on one **8 GB laptop GPU**.
 > **Research / education only. Synthetic data only. Not a diagnostic product, not
 > clinical decision support, not for real patient data or PHI.**
 
+**Live:** [results demo (HF Space, precomputed)](https://huggingface.co/spaces/rockyaaos/preventive-health-model-lab)
+· adapters (LoRA, base weights not redistributed): [MedGemma](https://huggingface.co/rockyaaos/medgemma-1.5-4b-preventive-qlora)
+· [Gemma 3 (control)](https://huggingface.co/rockyaaos/gemma-3-4b-preventive-qlora)
+
 ## The research question
 
 MedGemma 1.5 4B is Gemma 3 4B **plus** medical continued-pretraining. So fine-tune
