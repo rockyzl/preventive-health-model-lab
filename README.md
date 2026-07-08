@@ -1,152 +1,144 @@
 # Preventive Health Model Lab
 
-Fine-tuning open **medical LLMs** (MedGemma-class 4B, via QLoRA) for
-**longitudinal preventive-health reasoning support** — reading a patient's
-history over time and surfacing *trends, risk signals, and good questions for
-a clinician*, never a diagnosis.
+A small, reproducible **fine-tuning experiment**: does medical continued-pretraining
+help a 4B LLM reason about a patient's health **over time** — surfacing preventive
+risk signals (a slowly rising HbA1c, a blood-pressure creep against family history)
+in a structured, **non-diagnostic** form — after identical QLoRA fine-tuning? Runs
+end-to-end on one **8 GB laptop GPU**.
 
-> **Status: Phase 0/1 — design under review.** This repo is a scaffold. No
-> model has been trained or downloaded. What runs today is the environment
-> check, the baseline **dry-run**, and schema validation of the example data.
+> **Research / education only. Synthetic data only. Not a diagnostic product, not
+> clinical decision support, not for real patient data or PHI.**
 
----
+## The research question
 
-## ⚠️ Safety boundaries (read first)
+MedGemma 1.5 4B is Gemma 3 4B **plus** medical continued-pretraining. So fine-tune
+**both** with the *same* QLoRA recipe on the *same* synthetic data and ask: does the
+medical base actually reason better about preventive longitudinal signals? Same base
+family ⇒ the only variable is the medical pretraining. That is what makes this a
+controlled experiment rather than "make a model."
 
-This project is **research and education only**. It is built to make the
-safety framing structural, not optional:
+## Headline result (honest)
 
-- **No real PHI, ever.** Only synthetic or properly-licensed, de-identified
-  data enters the pipeline. The timeline validator hard-fails any record not
-  explicitly marked `synthetic: true`.
-- **The model must not diagnose.** The target output is *reasoning support*:
-  trends, risk signals, missing information, and questions for a clinician.
-- **Every output carries uncertainty + a clinician-review disclaimer.** This
-  is enforced through `src/preventive_health_model_lab/safety/` and is part of
-  the 7-part output schema, not an afterthought.
-- **Not a medical device.** Nothing here is validated for clinical use, and it
-  must never be used to make an actual health decision.
+On a held-out **synthetic** test set (n=6), scored by **automatic** metrics:
 
-If you are looking for medical advice, talk to a licensed clinician.
+| condition | overall | safety hard-fail | hallucinated #s |
+|---|---:|---:|---:|
+| Gemma 3 base | 0.612 | 100 % | 2 |
+| **Gemma 3 QLoRA** | **1.000** | 0 % | 0 |
+| MedGemma base | 0.614 | 100 % | 7 |
+| MedGemma QLoRA | 0.997 | 0 % | 2 |
 
----
+- **QLoRA worked, dramatically, for both** — the biggest, most consistent effect was
+  turning models that routinely broke the safety contract (no disclaimer, diagnostic
+  language) into ones that reliably follow the 7-part, non-diagnostic, faithful
+  format.
+- **Medical pretraining showed *no measurable advantage*** here: the non-medical
+  control matched (marginally beat) MedGemma. With n=6, automatic metrics, and
+  synthetic data, the honest conclusion is "no evidence of an advantage on this
+  benchmark," **not** "the medical model is better." Full analysis + caveats:
+  [`reports/final_experiment_report.md`](reports/final_experiment_report.md).
 
-## Why this project
+The value of this project is that it reads like a **real experiment with an honest,
+slightly inconvenient result** — not an over-packaged demo.
 
-**Why preventive health?** The high-value, lower-acute-risk reasoning task is
-noticing *drift over time* — an HbA1c creeping from 5.5 → 6.3, an LDL trend, a
-blood-pressure creep against a strong family history — and turning that into
-the right questions before anything becomes acute. That is a longitudinal,
-multi-signal reasoning problem, which is exactly where a fine-tuned model can
-add structure.
+## Why synthetic data
 
-**Why fine-tuning, not RAG alone?** Retrieval is great for *facts* ("what is
-the prediabetes range?"). It does not teach a model to:
+No public dataset is simultaneously longitudinal + preventive + instruction-formatted
++ license-clean, and real EHR data (MIMIC, EHRSHOT) is credential-gated and legally
+can't be sent through third-party services. So v1 uses a seeded Python generator: 60
+synthetic patients across 5 trajectory archetypes, with each patient's **gold answer
+derived from the same emitted numbers** (correct-by-construction, no hallucinated
+values) and all biomarkers clamped to the **preventive/borderline** range so the
+right answer is always "monitor + refer," never a diagnosis. Real-data validation is
+explicitly future work. See [`hf_release/dataset_card.md`](hf_release/dataset_card.md).
 
-- read a **multi-year, multi-signal timeline** and weigh co-occurring trends,
-- consistently emit a **structured 7-part answer** with calibrated hedging,
-- reliably **stay inside the safety envelope** (no diagnosis, always disclaim).
+## Method
 
-Those are *behaviors/format/tone*, which supervised fine-tuning shapes far
-more reliably than prompting + RAG. RAG stays useful and complementary for
-grounding factual claims — the two are not mutually exclusive.
+- **QLoRA**: base loaded in 4-bit (nf4); train a ~30M-param LoRA adapter (<1% of 4B,
+  ~57 MB) on the language-model projections; base weights frozen. This is what makes
+  a 4B fine-tune fit in 8 GB.
+- **Stack**: PyTorch 2.11 (cu128, Blackwell/sm_120), Transformers 5, PEFT, TRL,
+  bitsandbytes 0.49. Config: [`configs/sft_lora_medical.yaml`](configs/sft_lora_medical.yaml).
+- **Recipe (identical for both models)**: r=16/α=32, 5 epochs, effective batch 8,
+  lr 2e-4 cosine, seq≤2048.
 
----
+## Evaluation
 
-## Hardware
+Automatic, per-output metrics (no clinician in the loop): **schema conformance**
+(all 7 sections), **safety disclaimer present**, **non-diagnostic** (a red-flag
+scanner; diagnostic phrasing is a hard fail), and **numeric grounding** (every
+clinical number cited must appear in the input — the anti-hallucination check). Gold
+answers score a perfect 1.000 as the ceiling. These measure **form + faithfulness,
+not clinical correctness.**
 
-Developed for a modest local box:
-
-- GPU: **NVIDIA RTX PRO 2000 (Blackwell), 8 GB VRAM** → 4-bit QLoRA only
-- CUDA 13.1, 31 GB system RAM, WSL2, Python 3.12
-- Everything is sized for a single small GPU: 4B base, `r=16` LoRA, batch 1 +
-  grad accumulation, gradient checkpointing. See `configs/sft_lora_medical.yaml`.
-
-`bitsandbytes` Blackwell/`sm_120` support is **verified working** (2026-07-07):
-torch 2.11.0+cu128 + bnb 0.49.2, 4-bit load+generate OK at 0.44 GiB. Reproduce
-with `python scripts/00b_smoke_test_4bit.py`; details in
-`reports/environment_verified.md`.
-
----
-
-## What works TODAY
+## Pipeline (reproduce)
 
 ```bash
-# 0. create a light venv for the non-GPU tooling (required: steps 3 and 5
-#    need pyyaml/pytest; steps 1/2/4 are pure stdlib)
 python3 -m venv .venv && source .venv/bin/activate
-pip install pyyaml pandas pytest        # light tools only; NOT the GPU stack
+pip install -r requirements.txt          # + torch per pytorch.org (cu128 for Blackwell)
 
-# 1. Check the environment (safe to run anywhere; PASS/WARN table)
-python scripts/00_check_environment.py
-
-# 2. Validate the example synthetic timeline against the schema
-python scripts/02_build_instruction_dataset.py --validate-examples
-
-# 3. Dry-run the baseline: resolve config + prompts, print the plan, exit 0
-#    (loads NO model, no network access)
-python scripts/03_run_baseline.py --dry-run
-
-# 4. List intended data sources (nothing is fetched)
-python scripts/01_download_or_prepare_data.py --list-sources
-
-# 5. Run the test suite
-python -m pytest -q
+python scripts/00_check_environment.py                 # env + GPU
+python scripts/00b_smoke_test_4bit.py                  # prove 4-bit works on this GPU
+python scripts/01_download_or_prepare_data.py --generate --n 60 --seed 42 --out data/synthetic/timelines.jsonl
+python scripts/02_build_instruction_dataset.py --build # -> data/processed/{train,val,test}.jsonl (patient split)
+# accept the gated MedGemma + Gemma-3 licenses on huggingface.co, then `hf auth login`
+python scripts/04_train_sft.py --no-track --no-eval                                   # MedGemma
+python scripts/04_train_sft.py --model google/gemma-3-4b-it --output-dir adapters/gemma3-4b-preventive-sft-v0 --no-track --no-eval  # control
+python scripts/06_generate_predictions.py ...          # 4 conditions -> outputs/predictions/
+python scripts/07_build_comparison.py                  # scores + comparison + demo artifacts
+python -m pytest -q                                    # 47 tests
 ```
 
-Everything else (data build, training, real inference, eval scoring) is a
-**skeleton** and will raise a clear `NotImplementedError` or exit with guidance.
+(`--no-track --no-eval` + `TOKENIZERS_PARALLELISM=false` avoid a WSL2 trainer-start
+deadlock; see the report/commits.)
 
----
-
-## Repository layout
+## Repo layout
 
 ```
-configs/     sft_lora_medical.yaml (training design contract), eval.yaml
-data/        raw/ processed/ eval/ synthetic/  (+ README with data rules)
-scripts/     00_check_environment  01_download_or_prepare_data
-             02_build_instruction_dataset  03_run_baseline
-src/preventive_health_model_lab/
-             data/ (schema + validators)  safety/ (disclaimer + guardrails)
-             training/ evaluation/ inference/ utils/
-examples/    sample_patient_timeline.json (SYNTHETIC-001)
-             sample_model_output.md (gold-standard 7-part output)
-tests/       schema, env-check, and baseline dry-run tests
-reports/     experiment_log.md
-notebooks/ app/
+configs/    sft_lora_medical.yaml, eval.yaml
+scripts/    00 env · 00b 4-bit smoke · 01 generate · 02 build · 03 baseline
+            04 train · 05 evaluate · 06 predictions · 07 comparison
+src/preventive_health_model_lab/  data/ (schema, generator, rendering)
+            safety/ training/ evaluation/ inference/ utils/
+outputs/    predictions/  evaluation/   (scores, comparison CSVs, failure cases)
+demo_artifacts/  precomputed, synthetic-only, public-demo-safe bundle + safety banner
+hf_release/ draft adapter model cards, dataset card, Space README (adapter-only)
+reports/    final_experiment_report.md, final_handoff_summary.md, phase2_status.md, ...
+tests/      47 tests (data, safety gate, training smoke, evaluation)
 ```
 
 ## The 7-part output schema
 
-Every model answer must contain these sections (canonical list in
-`src/preventive_health_model_lab/data/schema.py::OUTPUT_SECTIONS`):
+1. Longitudinal summary · 2. Risk signals · 3. Evidence (exact data points) ·
+4. Missing information · 5. Clinician questions · 6. Safety disclaimer ·
+7. What NOT to conclude. Canonical list in `src/.../data/schema.py::OUTPUT_SECTIONS`;
+hand-written gold example in `examples/sample_model_output.md`.
 
-1. **Longitudinal summary** — the trend story over time
-2. **Risk signals** — what stands out, and why it clusters
-3. **Evidence** — the specific data points behind each signal
-4. **Missing information** — what would change the picture
-5. **Clinician questions** — what to ask / check next
-6. **Safety disclaimer** — uncertainty + not-a-diagnosis
-7. **What NOT to conclude** — explicit anti-overreach guardrails
+## Safety boundaries (structural, not optional)
 
-See `examples/sample_model_output.md` for a hand-written gold example.
+No real PHI ever (the schema hard-fails any record not marked `synthetic: true`); the
+model must not diagnose; every output carries the disclaimer + "what not to conclude";
+not a medical device. Any public demo is **precomputed and read-only** — it must
+never accept user health data or run live inference on user text (see
+[`demo_artifacts/safety_disclaimer.md`](demo_artifacts/safety_disclaimer.md)).
 
----
+## Limitations (read before believing the numbers)
 
-## Phase roadmap
+Tiny test set (n=6 ⇒ rank gaps are noise); automatic metrics measure form +
+faithfulness, **not** clinical correctness; synthetic + template-derived gold ⇒ high
+scores partly reflect format-matching; base MedGemma outputs partly degenerated and
+hit the token cap; test split lacks one archetype; **no clinical validation**. Real
+clinical data + clinician review are required to say anything about real-world use.
 
-- **Phase 0/1 — design + scaffold (this repo):** structure, safety framing,
-  schema, runnable env-check + dry-run + validation, tests. *Under review.*
-- **Phase 2 — data:** synthetic timeline generator, instruction-dataset build,
-  patient-level splits, dedup. Real generation still not wired.
-- **Phase 3 — baseline:** pull a gated MedGemma-class model (deliberately),
-  run the baseline over synthetic timelines, score schema conformance + safety.
-- **Phase 4 — training:** QLoRA SFT per `configs/sft_lora_medical.yaml`, track
-  in MLflow, evaluate the adapter vs. baseline.
-- **Phase 5 — app + eval harness:** Streamlit demo (clearly labeled research
-  tool), richer rubric scoring, safety red-team pass.
+## What's demo-safe vs not
+
+- **Safe to show publicly:** everything in `demo_artifacts/` (synthetic timelines,
+  the 4 model outputs, scores, honest failures), the report, the code.
+- **Not for release without a separate license/legal review:** merged base-model
+  weights (ship **adapter-only**); any real patient data (there is none here).
 
 ## License
 
-MIT — see `LICENSE`. Note: the *base models* (e.g. MedGemma) carry their own,
-stricter licenses you must accept separately.
+Code: MIT (`LICENSE`). Adapters are derivative of their gated base models
+(MedGemma / Gemma terms) — accept those separately; confirm redistribution terms
+before publishing adapters.

@@ -1,0 +1,6 @@
+condition,disclaimer_present,non_diagnostic,numeric_grounding,schema_conformance,overall_auto_score,hard_fail_rate,n_hallucinated_numbers
+gemma3_base,0.0,0.5,0.9496,1.0,0.6124,1.0,2
+gemma3_qlora,1.0,1.0,1.0,1.0,1.0,0.0,0
+medgemma_base,0.0,0.6667,0.9541,0.8333,0.6135,1.0,7
+medgemma_qlora,1.0,1.0,0.9867,1.0,0.9967,0.0,2
+gold_ceiling,1.0,1.0,1.0,1.0,1.0,0.0,0

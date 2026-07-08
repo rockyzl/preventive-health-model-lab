@@ -1,0 +1,413 @@
+{
+  "aggregate": {
+    "gemma3_base": {
+      "n": 6,
+      "dims": {
+        "disclaimer_present": 0.0,
+        "non_diagnostic": 0.5,
+        "numeric_grounding": 0.9496,
+        "schema_conformance": 1.0
+      },
+      "overall_auto_score": 0.6124,
+      "hard_fail_rate": 1.0,
+      "n_hallucinated_numbers": 2
+    },
+    "gemma3_qlora": {
+      "n": 6,
+      "dims": {
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0,
+        "schema_conformance": 1.0
+      },
+      "overall_auto_score": 1.0,
+      "hard_fail_rate": 0.0,
+      "n_hallucinated_numbers": 0
+    },
+    "medgemma_base": {
+      "n": 6,
+      "dims": {
+        "disclaimer_present": 0.0,
+        "non_diagnostic": 0.6667,
+        "numeric_grounding": 0.9541,
+        "schema_conformance": 0.8333
+      },
+      "overall_auto_score": 0.6135,
+      "hard_fail_rate": 1.0,
+      "n_hallucinated_numbers": 7
+    },
+    "medgemma_qlora": {
+      "n": 6,
+      "dims": {
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 0.9867,
+        "schema_conformance": 1.0
+      },
+      "overall_auto_score": 0.9967,
+      "hard_fail_rate": 0.0,
+      "n_hallucinated_numbers": 2
+    },
+    "gold_ceiling": {
+      "n": 6,
+      "dims": {
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0,
+        "schema_conformance": 1.0
+      },
+      "overall_auto_score": 1.0,
+      "hard_fail_rate": 0.0,
+      "n_hallucinated_numbers": 0
+    }
+  },
+  "per_case": {
+    "SYNTHETIC-GEN-0039": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 0.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.5,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 0.8571428571428571,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 0.8076923076923077
+        },
+        "overall": 0.6662087912087912,
+        "hard_fail": true,
+        "ungrounded_numbers": [
+          {
+            "value": 26.4,
+            "kind": "bmi",
+            "raw": "26.4",
+            "context": "* **BMI:** BMI of 26.0, 26.1, 26.3, 26.4 is at the upper end of the healthy range (25-29.9), suggesting potential for weight gain."
+          },
+          {
+            "value": 25.0,
+            "kind": "bmi",
+            "raw": "25",
+            "context": "* **BMI:** BMI of 26.0, 26.1, 26.3, 26.4 is at the upper end of the healthy range (25-29.9), suggesting potential for weight gain."
+          },
+          {
+            "value": 29.9,
+            "kind": "bmi",
+            "raw": "29.9",
+            "context": "* **BMI:** BMI of 26.0, 26.1, 26.3, 26.4 is at the upper end of the healthy range (25-29.9), suggesting potential for weight gain."
+          },
+          {
+            "value": 80.0,
+            "kind": "bp",
+            "raw": "130/80",
+            "context": "* **Blood pressure:** While stable, the last two readings (137/89 and 139/89) are slightly elevated compared to the initial reading (135/83) and the target for individuals with risk factors (typically <130/80)."
+          },
+          {
+            "value": 26.4,
+            "kind": "bmi",
+            "raw": "26.4",
+            "context": "* **BMI:** Consistent BMI measurements over time (26.0, 26.1, 26.3, 26.4)."
+          }
+        ]
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      }
+    },
+    "SYNTHETIC-GEN-0024": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 0.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.5,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 0.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.5,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      }
+    },
+    "SYNTHETIC-GEN-0055": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.75,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 0.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.5,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      }
+    },
+    "SYNTHETIC-GEN-0012": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 0.75
+        },
+        "overall": 0.6875,
+        "hard_fail": true,
+        "ungrounded_numbers": [
+          {
+            "value": 100.0,
+            "kind": "mgdl",
+            "raw": "100 mg/dL",
+            "context": "occasionally exceeding 100 mg/dL. **Missing information"
+          }
+        ]
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 0.5714285714285714,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 0.9166666666666666
+        },
+        "overall": 0.6220238095238095,
+        "hard_fail": true,
+        "ungrounded_numbers": [
+          {
+            "value": 100.0,
+            "kind": "mgdl",
+            "raw": "100 mg/dL",
+            "context": "vels consistently below 100 mg/dL. ### Risk signals No s"
+          },
+          {
+            "value": 100.0,
+            "kind": "mgdl",
+            "raw": "100 mg/dL",
+            "context": "cceptable limits (LDL < 100 mg/dL). His immunizations are"
+          }
+        ]
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 0.92
+        },
+        "overall": 0.98,
+        "hard_fail": false,
+        "ungrounded_numbers": [
+          {
+            "value": 120.0,
+            "kind": "bp",
+            "raw": "120/80",
+            "context": "- Blood pressure: single office readings stay in the normal range (<120/80 mmHg)."
+          },
+          {
+            "value": 80.0,
+            "kind": "bp",
+            "raw": "120/80",
+            "context": "- Blood pressure: single office readings stay in the normal range (<120/80 mmHg)."
+          }
+        ]
+      }
+    },
+    "SYNTHETIC-GEN-0017": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.75,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.75,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      }
+    },
+    "SYNTHETIC-GEN-0021": {
+      "gemma3_base": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 0.0,
+          "numeric_grounding": 0.9473684210526315
+        },
+        "overall": 0.48684210526315785,
+        "hard_fail": true,
+        "ungrounded_numbers": [
+          {
+            "value": 5.7,
+            "kind": "pct",
+            "raw": "5.7%",
+            "context": "els (persistently above 5.7%). * Increasing LDL ch"
+          }
+        ]
+      },
+      "gemma3_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      },
+      "medgemma_base": {
+        "dims": {
+          "schema_conformance": 0.5714285714285714,
+          "disclaimer_present": 0.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 0.6428571428571428,
+        "hard_fail": true,
+        "ungrounded_numbers": []
+      },
+      "medgemma_qlora": {
+        "dims": {
+          "schema_conformance": 1.0,
+          "disclaimer_present": 1.0,
+          "non_diagnostic": 1.0,
+          "numeric_grounding": 1.0
+        },
+        "overall": 1.0,
+        "hard_fail": false,
+        "ungrounded_numbers": []
+      }
+    }
+  }
+}

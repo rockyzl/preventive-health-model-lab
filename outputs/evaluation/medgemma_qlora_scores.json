@@ -1,0 +1,114 @@
+{
+  "condition": "medgemma_qlora",
+  "aggregate": {
+    "n": 6,
+    "dims": {
+      "disclaimer_present": 1.0,
+      "non_diagnostic": 1.0,
+      "numeric_grounding": 0.9867,
+      "schema_conformance": 1.0
+    },
+    "overall_auto_score": 0.9967,
+    "hard_fail_rate": 0.0,
+    "n_hallucinated_numbers": 2
+  },
+  "per_record": [
+    {
+      "patient_id": "SYNTHETIC-GEN-0039",
+      "archetype": "isolated-hypertension",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0
+      },
+      "overall": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": []
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0024",
+      "archetype": "isolated-hypertension",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0
+      },
+      "overall": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": []
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0055",
+      "archetype": "lipid-plus-family-risk",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0
+      },
+      "overall": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": []
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0012",
+      "archetype": "stable-healthy",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 0.92
+      },
+      "overall": 0.98,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": [
+        {
+          "value": 120.0,
+          "kind": "bp",
+          "raw": "120/80",
+          "context": "- Blood pressure: single office readings stay in the normal range (<120/80 mmHg)."
+        },
+        {
+          "value": 80.0,
+          "kind": "bp",
+          "raw": "120/80",
+          "context": "- Blood pressure: single office readings stay in the normal range (<120/80 mmHg)."
+        }
+      ]
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0017",
+      "archetype": "stable-healthy",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0
+      },
+      "overall": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": []
+    },
+    {
+      "patient_id": "SYNTHETIC-GEN-0021",
+      "archetype": "cardiometabolic-drift",
+      "dims": {
+        "schema_conformance": 1.0,
+        "disclaimer_present": 1.0,
+        "non_diagnostic": 1.0,
+        "numeric_grounding": 1.0
+      },
+      "overall": 1.0,
+      "hard_fail": false,
+      "hard_fail_reasons": [],
+      "ungrounded_numbers": []
+    }
+  ]
+}

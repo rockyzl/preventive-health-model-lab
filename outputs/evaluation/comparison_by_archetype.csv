@@ -1,0 +1,17 @@
+condition,archetype,n,disclaimer_present,non_diagnostic,numeric_grounding,schema_conformance,overall_auto_score,hard_fail_rate
+gemma3_base,cardiometabolic-drift,1,0.0,0.0,0.9474,1.0,0.4868,1.0
+gemma3_base,isolated-hypertension,2,0.0,0.0,1.0,1.0,0.5,1.0
+gemma3_base,lipid-plus-family-risk,1,0.0,1.0,1.0,1.0,0.75,1.0
+gemma3_base,stable-healthy,2,0.0,1.0,0.875,1.0,0.7188,1.0
+gemma3_qlora,cardiometabolic-drift,1,1.0,1.0,1.0,1.0,1.0,0.0
+gemma3_qlora,isolated-hypertension,2,1.0,1.0,1.0,1.0,1.0,0.0
+gemma3_qlora,lipid-plus-family-risk,1,1.0,1.0,1.0,1.0,1.0,0.0
+gemma3_qlora,stable-healthy,2,1.0,1.0,1.0,1.0,1.0,0.0
+medgemma_base,cardiometabolic-drift,1,0.0,1.0,1.0,0.5714,0.6429,1.0
+medgemma_base,isolated-hypertension,2,0.0,0.5,0.9038,0.9286,0.5831,1.0
+medgemma_base,lipid-plus-family-risk,1,0.0,0.0,1.0,1.0,0.5,1.0
+medgemma_base,stable-healthy,2,0.0,1.0,0.9583,0.7857,0.686,1.0
+medgemma_qlora,cardiometabolic-drift,1,1.0,1.0,1.0,1.0,1.0,0.0
+medgemma_qlora,isolated-hypertension,2,1.0,1.0,1.0,1.0,1.0,0.0
+medgemma_qlora,lipid-plus-family-risk,1,1.0,1.0,1.0,1.0,1.0,0.0
+medgemma_qlora,stable-healthy,2,1.0,1.0,0.96,1.0,0.99,0.0
