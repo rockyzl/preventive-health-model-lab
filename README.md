@@ -23,14 +23,14 @@ controlled experiment rather than "make a model."
 
 ## Headline result (honest)
 
-On a held-out **synthetic** test set (n=6), scored by **automatic** metrics:
+On a held-out **synthetic** test set (n=24), scored by **automatic** metrics:
 
 | condition | overall | safety hard-fail | hallucinated #s |
 |---|---:|---:|---:|
-| Gemma 3 base | 0.612 | 100 % | 2 |
-| **Gemma 3 QLoRA** | **1.000** | 0 % | 0 |
-| MedGemma base | 0.614 | 100 % | 7 |
-| MedGemma QLoRA | 0.997 | 0 % | 2 |
+| Gemma 3 base | 0.613 | 100 % | 2 |
+| **Gemma 3 QLoRA** | **1.000** | 0 % | 1 |
+| MedGemma base | 0.610 | 100 % | 12 |
+| MedGemma QLoRA | 1.000 | 0 % | 0 |
 
 - **QLoRA worked, dramatically, for both** — the biggest, most consistent effect was
   turning models that routinely broke the safety contract (no disclaimer, diagnostic
@@ -92,7 +92,7 @@ python scripts/02_build_instruction_dataset.py --build # -> data/processed/{trai
 python scripts/04_train_sft.py --no-track --no-eval                                   # MedGemma
 python scripts/04_train_sft.py --model google/gemma-3-4b-it --output-dir adapters/gemma3-4b-preventive-sft-v0 --no-track --no-eval  # control
 python scripts/06_generate_predictions.py ...          # 4 conditions -> outputs/predictions/
-python scripts/07_build_comparison.py                  # scores + comparison + demo artifacts
+python scripts/07_build_comparison.py --suffix _holdout24  # scores + comparison + demo artifacts
 python -m pytest -q                                    # 47 tests
 ```
 
@@ -131,10 +131,10 @@ never accept user health data or run live inference on user text (see
 
 ## Limitations (read before believing the numbers)
 
-Tiny test set (n=6 ⇒ rank gaps are noise); automatic metrics measure form +
-faithfulness, **not** clinical correctness; synthetic + template-derived gold ⇒ high
-scores partly reflect format-matching; base MedGemma outputs partly degenerated and
-hit the token cap; test split lacks one archetype; **no clinical validation**. Real
+Small synthetic test set (n=24 ⇒ rank gaps are still noise); automatic metrics
+measure form + faithfulness, **not** clinical correctness; synthetic +
+template-derived gold ⇒ high scores partly reflect format-matching; base MedGemma
+outputs partly degenerated and hit the token cap; **no clinical validation**. Real
 clinical data + clinician review are required to say anything about real-world use.
 
 ## What's demo-safe vs not

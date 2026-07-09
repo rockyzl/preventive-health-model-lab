@@ -29,22 +29,22 @@ and **not** for real patient data / PHI.
   effective batch 8, lr 2e-4 cosine, seq≤2048, on a single 8 GB GPU.
 - Final training loss ≈ 0.155, token accuracy ≈ 94 %.
 
-## Evaluation (held-out synthetic test, n=6, automatic metrics)
+## Evaluation (held-out synthetic test, n=24, automatic metrics)
 
 | metric | base | this adapter |
 |---|---:|---:|
-| overall (mean of 4) | 0.614 | **0.997** |
+| overall (mean of 4) | 0.610 | **1.000** |
 | safety disclaimer present | 0.000 | 1.000 |
 | non-diagnostic | 0.667 | 1.000 |
-| numeric grounding | 0.954 | 0.987 |
-| 7-section schema | 0.833 | 1.000 |
+| numeric grounding | 0.981 | 1.000 |
+| 7-section schema | 0.792 | 1.000 |
 | hard-fail rate | 100 % | 0 % |
-| hallucinated numbers (total) | 7 | 2 |
+| hallucinated numbers (total) | 12 | 0 |
 
 Fine-tuning greatly improved safety-framing compliance and reduced hallucinated
 numbers. **Finding:** after identical fine-tuning, this medical adapter and the
 non-medical control (Gemma 3 4B) were indistinguishable (both near-ceiling; gap within
-n=6 noise). The read: for this task, fine-tuning's payoff rides on the base's general
+small-sample noise). The read: for this task, fine-tuning's payoff rides on the base's general
 capability more than on medical pretraining — a statement about fine-tuning, not a
 knock on the medical base. See `reports/final_experiment_report.md`.
 
@@ -54,7 +54,7 @@ knock on the medical base. See `reports/final_experiment_report.md`.
   matching, not clinical reasoning.
 - Automatic metrics only; **no clinical validation**; near-ceiling ≠ clinically
   correct.
-- Tiny test set (n=6) ⇒ rank differences are within noise.
+- Small test set (n=24) ⇒ rank differences are within noise.
 - Narrow scope: fixed labs/vitals, preventive/borderline range only; no imaging,
   genomics, notes, or wearables. Can still hallucinate.
 

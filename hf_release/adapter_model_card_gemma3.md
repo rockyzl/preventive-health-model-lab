@@ -28,29 +28,29 @@ for real patient data / PHI.
   effective batch 8, lr 2e-4 cosine, seq≤2048, single 8 GB GPU.
 - Final training loss ≈ 0.157, token accuracy ≈ 94 %.
 
-## Evaluation (held-out synthetic test, n=6, automatic metrics)
+## Evaluation (held-out synthetic test, n=24, automatic metrics)
 
 | metric | base | this adapter |
 |---|---:|---:|
-| overall (mean of 4) | 0.612 | **1.000** |
+| overall (mean of 4) | 0.613 | **1.000** |
 | safety disclaimer present | 0.000 | 1.000 |
-| non-diagnostic | 0.500 | 1.000 |
-| numeric grounding | 0.950 | 1.000 |
+| non-diagnostic | 0.458 | 1.000 |
+| numeric grounding | 0.994 | 0.999 |
 | 7-section schema | 1.000 | 1.000 |
 | hard-fail rate | 100 % | 0 % |
-| hallucinated numbers (total) | 2 | 0 |
+| hallucinated numbers (total) | 2 | 1 |
 
 **Finding:** after identical fine-tuning, this non-medical control was
 **indistinguishable from** the medical MedGemma adapter (both near-ceiling; the small
-gap is within n=6 noise). The useful read is that a capable base plus task fine-tuning
-carried the result — medical pretraining was not the deciding factor for this task.
-Interpret with care — n=6, automatic metrics, synthetic data. See
+gap is within small-sample noise). The useful read is that a capable base plus task
+fine-tuning carried the result — medical pretraining was not the deciding factor for this task.
+Interpret with care — n=24, automatic metrics, synthetic data. See
 `reports/final_experiment_report.md`.
 
 ## Limitations
 
 Same as the MedGemma adapter: synthetic-data bias, template-derived gold, automatic
-metrics only, no clinical validation, tiny test set, narrow lab/vital scope, possible
+metrics only, no clinical validation, small test set, narrow lab/vital scope, possible
 hallucination.
 
 ## License

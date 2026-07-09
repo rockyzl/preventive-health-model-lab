@@ -109,7 +109,7 @@ def main() -> int:
         summary_rows.append(row)
     for dest in (EVAL_DIR / "comparison_summary.csv", DEMO_DIR / "comparison_summary.csv"):
         with open(dest, "w", newline="", encoding="utf-8") as fh:
-            w = csv.DictWriter(fh, fieldnames=cols)
+            w = csv.DictWriter(fh, fieldnames=cols, lineterminator="\n")
             w.writeheader()
             w.writerows(summary_rows)
 
@@ -117,7 +117,8 @@ def main() -> int:
     archetypes = sorted({s["archetype"] for c in CONDITIONS for s in scored[c]})
     with open(EVAL_DIR / "comparison_by_archetype.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["condition", "archetype", "n", *dim_names,
-                                           "overall_auto_score", "hard_fail_rate"])
+                                           "overall_auto_score", "hard_fail_rate"],
+                           lineterminator="\n")
         w.writeheader()
         for c in CONDITIONS:
             for arch in archetypes:

@@ -69,6 +69,14 @@ CSS = r"""
 .phml .legend{display:flex; gap:16px; margin-top:12px; font-size:.78rem; color:var(--muted); flex-wrap:wrap;}
 .phml .legend i{display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:5px; vertical-align:-1px;}
 .phml .sw-base{background:var(--warn);} .phml .sw-tuned{background:var(--good);}
+/* under-the-hood spec */
+.phml .spectitle{font-family:var(--fb); font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 10px;}
+.phml dl.spec{margin:0 0 22px; display:grid; gap:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--surface);}
+.phml dl.spec>div{display:grid; grid-template-columns:110px 1fr; gap:14px; padding:10px 16px; border-top:1px solid var(--line); align-items:baseline;}
+.phml dl.spec>div:first-child{border-top:0;}
+.phml dl.spec dt{margin:0; font-size:.76rem; font-weight:700; color:var(--accent-2); font-family:var(--fm);}
+.phml dl.spec dd{margin:0; font-size:.86rem; color:var(--ink);}
+@media (max-width:560px){.phml dl.spec>div{grid-template-columns:1fr; gap:2px;}}
 /* fine print + links */
 .phml .fine{color:var(--muted); font-size:.8rem; margin:0 0 4px;}
 .phml .links{display:flex; gap:18px; flex-wrap:wrap; font-size:.88rem; margin:6px 0 0;}

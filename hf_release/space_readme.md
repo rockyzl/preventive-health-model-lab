@@ -42,7 +42,7 @@ QLoRA fine-tuning reliably instilled the safe, non-diagnostic, 7-part format in 
 finding: after fine-tuning the medical model (MedGemma) and the general control
 (Gemma 3) were **indistinguishable** — so for this task, fine-tuning's payoff rode on
 the base's general capability more than on medical pretraining. Synthetic data +
-automatic metrics + n=6 ⇒ do not overclaim.
+automatic metrics + n=24 ⇒ do not overclaim.
 
 ## What it must never do
 

@@ -21,7 +21,7 @@ public-demo package:
 | artifact | path |
 |---|---|
 | Trained adapters (gitignored, ~57 MB each) | `adapters/medgemma-1.5-4b-preventive-sft-v0/`, `adapters/gemma3-4b-preventive-sft-v0/` |
-| Predictions (4 conditions) | `outputs/predictions/*_test_predictions.jsonl` |
+| Predictions (4 conditions) | `outputs/predictions/*_test_predictions.jsonl` and expanded `*_holdout24.jsonl` |
 | Evaluation scores + comparison | `outputs/evaluation/` (`comparison_summary.csv`, `comparison_by_archetype.csv`, `failure_cases.jsonl`, `<cond>_scores.json`) |
 | Final report | `reports/final_experiment_report.md` |
 | Public demo package | `demo_artifacts/` |
@@ -32,10 +32,10 @@ public-demo package:
 QLoRA fine-tuning reliably instilled the safe, non-diagnostic, 7-part format in both
 models (safety hard-fail 100 % → 0 %; overall 0.61 → ~1.0). **The unexpected, useful
 finding: medical pretraining was not the deciding factor** — after fine-tuning the
-medical and general bases were indistinguishable (Gemma 3 QLoRA 1.000; MedGemma QLoRA
-0.997; the gap is within n=6 noise). Read: for this task, fine-tuning's payoff rides
+medical and general bases were indistinguishable (Gemma 3 QLoRA 0.9997; MedGemma QLoRA
+1.000; the gap is within small-sample/metric noise). Read: for this task, fine-tuning's payoff rides
 on the base's general capability more than on domain pretraining — a finding about
-fine-tuning, not a knock on medical models. n=6 + automatic metrics + synthetic data
+fine-tuning, not a knock on medical models. n=24 + automatic metrics + synthetic data
 ⇒ do not overclaim.
 
 ## Top 3 strengths
@@ -50,7 +50,7 @@ fine-tuning, not a knock on medical models. n=6 + automatic metrics + synthetic 
 
 ## Top 3 limitations
 
-1. Tiny synthetic test set (n=6) + automatic metrics ⇒ measures form/faithfulness,
+1. Small synthetic test set (n=24) + automatic metrics ⇒ measures form/faithfulness,
    not clinical correctness; rank differences are within noise.
 2. Template-derived gold ⇒ fine-tuning largely learns the target format; likely
    overstates real-world performance.
