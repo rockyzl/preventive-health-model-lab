@@ -1,10 +1,10 @@
-# Space README (draft) — Preventive Health Model Lab · results viewer
+# Space README — Preventive Health Model Lab · results viewer
 
-**Draft — do not upload until explicitly asked.**
+This is the README currently used for the published static Hugging Face Space.
 
-```
+```yaml
 ---
-title: Preventive Health Model Lab (research demo)
+title: Preventive Health Model Lab
 emoji: 🩺
 colorFrom: indigo
 colorTo: gray
@@ -12,6 +12,7 @@ sdk: static
 app_file: index.html
 pinned: false
 license: other
+short_description: Static QLoRA preventive-health demo
 ---
 ```
 
@@ -28,7 +29,7 @@ health decisions. Always consult a qualified clinician. (Full text:
 
 A **precomputed, read-only** comparison — **no live model runs**, no user input. It
 serves a self-contained `index.html` generated from `demo_artifacts/` and lets you
-inspect, for a handful of synthetic patients:
+inspect 24 held-out synthetic patients:
 
 - the synthetic timeline and the gold reference answer,
 - four model outputs side by side — Gemma 3 and MedGemma, each **before and after**
@@ -44,6 +45,13 @@ finding: after fine-tuning the medical model (MedGemma) and the general control
 (Gemma 3) were **indistinguishable** — so for this task, fine-tuning's payoff rode on
 the base's general capability more than on medical pretraining. Synthetic data +
 automatic metrics + n=24 ⇒ do not overclaim.
+
+| condition | overall auto score | hard-fail rate | hallucinated numbers |
+|---|---:|---:|---:|
+| Gemma 3 base | 0.613 | 100 % | 2 |
+| Gemma 3 QLoRA | 0.9997 | 0 % | 1 |
+| MedGemma base | 0.6098 | 100 % | 12 |
+| MedGemma QLoRA | 1.000 | 0 % | 0 |
 
 ## What it must never do
 
