@@ -8,7 +8,8 @@ title: Preventive Health Model Lab (research demo)
 emoji: 🩺
 colorFrom: indigo
 colorTo: gray
-sdk: streamlit
+sdk: static
+app_file: index.html
 pinned: false
 license: other
 ---
@@ -26,8 +27,8 @@ health decisions. Always consult a qualified clinician. (Full text:
 ## What this Space shows
 
 A **precomputed, read-only** comparison — **no live model runs**, no user input. It
-loads fixed JSON/CSV from `demo_artifacts/` and lets you inspect, for a handful of
-synthetic patients:
+serves a self-contained `index.html` generated from `demo_artifacts/` and lets you
+inspect, for a handful of synthetic patients:
 
 - the synthetic timeline and the gold reference answer,
 - four model outputs side by side — Gemma 3 and MedGemma, each **before and after**
